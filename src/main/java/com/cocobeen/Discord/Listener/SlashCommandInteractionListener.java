@@ -23,7 +23,7 @@ public class SlashCommandInteractionListener extends ListenerAdapter {
 
         switch (command){
             case "chatgpt":{
-                rubChatGPT(event);
+                runChatGPT(event);
                 break;
             }
             case "dalle": {
@@ -33,7 +33,7 @@ public class SlashCommandInteractionListener extends ListenerAdapter {
         }
     }
 
-    private void rubChatGPT(SlashCommandInteractionEvent event){
+    private void runChatGPT(SlashCommandInteractionEvent event){
         SlashCommandInteraction interaction = event.getInteraction();
         String model = interaction.getOption("模型").getAsString();
         String content = interaction.getOption("問題").getAsString();
