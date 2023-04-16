@@ -18,6 +18,7 @@ public class ChatGPTJSONObjectAnalyze {
     private int index = 0;
 
     public ChatGPTJSONObjectAnalyze(JSONObject jsonObject){
+        System.out.println(jsonObject);
         if (jsonObject.has("error")){
             return;
         }

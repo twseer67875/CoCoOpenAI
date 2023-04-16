@@ -1,9 +1,11 @@
 package com.cocobeen.Discord.Listener;
 
+import com.cocobeen.Main;
 import com.cocobeen.OpenAI.ChatGPT;
 import com.cocobeen.OpenAI.DallE;
 import com.cocobeen.Utils.ChatGPTJSONObjectAnalyze;
 import com.cocobeen.Utils.DallEJSONObjectAnalyze;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
@@ -35,7 +37,7 @@ public class SlashCommandInteractionListener extends ListenerAdapter {
 
     private void runChatGPT(SlashCommandInteractionEvent event){
         SlashCommandInteraction interaction = event.getInteraction();
-        String model = interaction.getOption("模型").getAsString();
+        String model = "gpt-3.5-turbo";
         String content = interaction.getOption("問題").getAsString();
 
         boolean show_content = true;
@@ -44,24 +46,47 @@ public class SlashCommandInteractionListener extends ListenerAdapter {
             if (optionMapping.getName().equals("公共頻道顯示")){
                 show_content = optionMapping.getAsBoolean();
             }
+            if (optionMapping.getName().equals("模型")){
+                model = interaction.getOption("模型").getAsString();
+            }
         }
 
         event.deferReply().queue();
+        String userID = event.getUser().getId();
 
-        ChatGPTJSONObjectAnalyze objectAnalyze = new ChatGPTJSONObjectAnalyze(ChatGPT.getChatGPTMessage(model, content));
+        ChatGPTJSONObjectAnalyze objectAnalyze = null;
 
-        if (objectAnalyze.getJSONObject() == null){
+        if (Main.ChatGPTMessageLog.containsKey(userID)){
+            String log = Main.ChatGPTMessageLog.get(userID);
+            objectAnalyze = new ChatGPTJSONObjectAnalyze(ChatGPT.getChatGPTMessage(model, content, log));
+        }
+        else {
+            objectAnalyze = new ChatGPTJSONObjectAnalyze(ChatGPT.getChatGPTMessage(model, content));
+        }
+
+        if (objectAnalyze.getJSONObject() == null) {
             event.getHook().sendMessage("ChatGPT 請求失敗，可能是參數有誤或是程式錯誤，如問題持續請聯絡開發者").queue();
             return;
         }
 
         String result = objectAnalyze.getContent();
+        Main.ChatGPTMessageLog.put(userID, result.replaceAll("\n", "\\n"));
+
+        result = "原始問題: `" + content + "`\n\n" + result;
 
         if (show_content){
-            result = "原始問題: `" + content + "`\n\n" + result;
+            event.getHook().sendMessage(result).queue();
+            return;
         }
 
-        event.getHook().sendMessage(result).queue();
+        User user = event.getUser();
+        if (!user.isBot()){
+            event.getHook().sendMessage("您的問題已被送至私人訊息內，如您沒有看到機器人的回覆請開啟 **允許陌生訊息** 並再次嘗試").queue();
+            String finalResult = result;
+            user.openPrivateChannel()
+                    .flatMap(channel -> channel.sendMessage(finalResult))
+                    .queue();
+        }
     }
 
     private void runDallE(SlashCommandInteractionEvent event){

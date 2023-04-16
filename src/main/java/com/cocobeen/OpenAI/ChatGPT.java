@@ -11,7 +11,17 @@ public class ChatGPT {
 
     public static JSONObject getChatGPTMessage(String model, String content){
         String post = "{\"model\": \"" + model + "\",\"messages\": [{\"role\": \"user\", \"content\": \"" + content + "\"}]}";
+        return postChatGPTRequest(post);
+    }
 
+    public static JSONObject getChatGPTMessage(String model, String content, String reply_before){
+        String post =
+                "{\"model\": \"" + model + "\",\"messages\": [{\"role\": \"assistant\", \"content\": \" "+ reply_before +" \"},{\"role\": \"user\", \"content\": \"" + content + "\"}]}";
+
+        return postChatGPTRequest(post);
+    }
+
+    private static JSONObject postChatGPTRequest(String post){
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(100, TimeUnit.SECONDS)
                 .readTimeout(100, TimeUnit.SECONDS)

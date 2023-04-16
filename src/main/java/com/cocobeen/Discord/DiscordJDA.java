@@ -35,8 +35,8 @@ public class DiscordJDA {
         jda.updateCommands().addCommands(
                 Commands
                         .slash("chatgpt", "使用此指令來指定 ChatGPT 模型並發問問題")
-                        .addOption(OptionType.STRING, "模型", "您要使用的 ChatGPT 模型", true, true)
                         .addOption(OptionType.STRING, "問題", "在此輸入您想要詢問 ChatGPT 的問題", true)
+                        .addOption(OptionType.STRING, "模型", "您要使用的 ChatGPT 模型", false, true)
                         .addOption(OptionType.BOOLEAN, "公共頻道顯示", "是否於公共頻道內顯示您詢問的問題 (默認為 是)", false, false),
                 Commands
                         .slash("dalle", "使用此指令來透過 DALL·E 並輸入提示詞來生成AI圖片")
