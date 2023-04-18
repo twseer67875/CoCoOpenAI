@@ -42,7 +42,10 @@ public class DiscordJDA {
                         .slash("dalle", "使用此指令來透過 DALL·E 並輸入提示詞來生成AI圖片")
                         .addOption(OptionType.STRING, "圖片解析度", "您要生成的圖片解析度", true, true)
                         .addOption(OptionType.INTEGER, "生成圖片數量", "您要生成的圖片數量 (最多 4 張)", true)
-                        .addOption(OptionType.STRING, "提示詞", "您要生成的圖片正面提示詞 (最多 1000 個字符)", true)
+                        .addOption(OptionType.STRING, "提示詞", "您要生成的圖片正面提示詞 (最多 1000 個字符)", true),
+                Commands
+                        .slash("ipcheck", "使用此指令來透過 IPGeolocation 來查詢此IP的詳細內容")
+                        .addOption(OptionType.STRING, "ip位置", "在此輸入ip位置", true)
         ).queue();
     }
 }

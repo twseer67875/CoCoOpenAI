@@ -3,7 +3,9 @@ package com.cocobeen.Utils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class ChatGPTJSONObjectAnalyze {
+import java.io.Serializable;
+
+public class ChatGPTJSONObjectAnalyze implements Serializable {
     private JSONObject jsonObj = null;
     private String id = "";
     private String object = "";
@@ -46,7 +48,7 @@ public class ChatGPTJSONObjectAnalyze {
         index = choicesJSONObject.getInt("index");
     }
 
-    public JSONObject getJSONObject(){
+    public JSONObject getJSON(){
         return jsonObj;
     }
 

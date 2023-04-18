@@ -3,10 +3,11 @@ package com.cocobeen.Utils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DallEJSONObjectAnalyze {
+public class DallEJSONObjectAnalyze implements Serializable {
     private JSONObject object = null;
     private List<String> img_b64 = new ArrayList<>();
     private int created = 0;
@@ -27,7 +28,7 @@ public class DallEJSONObjectAnalyze {
         created = jsonObject.getInt("created");
     }
 
-    public JSONObject getJSONObject(){
+    public JSONObject getJSON(){
         return object;
     }
 
